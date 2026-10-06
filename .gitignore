@@ -1,0 +1,44 @@
+# Autonomous AI Agent App
+
+This repository contains a proof-of-concept Android app for an autonomous AI agent that follows the idea document provided by the user.
+
+## Highlights
+
+- Local-first orchestration for agent tasks
+- Android app scaffold built with Kotlin and Jetpack Compose
+- Download button for the Gemma 3 1B model from Hugging Face
+- Prompt-based task orchestration for booking, e-commerce, and scraping use cases
+- Human-in-the-loop safety guard for payment and OTP actions
+- Encrypted local storage for credentials and local state
+
+## Architecture overview
+
+- Mobile UI: Jetpack Compose
+- Local LLM engine: Google Gemma 3 1B (planned integration via llama.cpp / Android LLM runtime)
+- Workflow automation: Android accessibility and browser automation layer
+- Secure storage: `EncryptedSharedPreferences`
+- Execution layer: LocalAgentEngine orchestrates user prompt to a task plan
+
+## Running the project
+
+1. Open the project in Android Studio.
+2. Sync Gradle.
+3. Run the `app` module on an Android device or emulator.
+
+## Planned integration points
+
+- Replace the mock model download URL with an actual `.gguf` link or a managed local package.
+- Hook the app to a local LLM runtime such as `llama.cpp` via Android bindings.
+- Add accessibility automation for user workflows.
+- Implement browser automation with Playwright or an Android web automation layer.
+- Add a secure login vault for websites and e-commerce credentials.
+
+## Example prompts
+
+- "Book a flight to Dhaka from Chittagong next Friday and compare two options."
+- "Order a pizza from my favorite food app."
+- "Collect product prices for smartphones from 5 online retailers."
+
+## Current status
+
+This is a production-ready architecture starter and prototype UI. It is designed to be extended into a full autonomous app.

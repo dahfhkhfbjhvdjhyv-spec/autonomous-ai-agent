@@ -1,66 +1,70 @@
-package com.autonomousai.agent.service
+# Autonomous AI Agent App
 
-import com.autonomousai.agent.model.AgentTask
-import com.autonomousai.agent.model.TaskType
+This repository contains an Android prototype for an autonomous AI agent app based on the provided idea and requirements document.
 
-class LocalAgentEngine {
+## Product vision
 
-    fun detectTaskTypes(prompt: String): List<String> {
-        val text = prompt.lowercase()
-        val detected = mutableListOf<String>()
+The app is designed to let a user describe a goal in Bengali or English, after which the agent can:
 
-        if (text.contains("ticket") || text.contains("flight") || text.contains("booking")) {
-            detected += "Booking"
-        }
-        if (text.contains("order") || text.contains("buy") || text.contains("cart")) {
-            detected += "E-commerce"
-        }
-        if (text.contains("scrape") || text.contains("collect") || text.contains("data") || text.contains("search")) {
-            detected += "Scraping"
-        }
+- orchestrate sub-tasks
+- detect intent such as booking, shopping, or scraping
+- download a local AI model
+- secure user credentials in encrypted local storage
+- enforce human-in-the-loop approval before final payment, OTP submission, or critical actions
 
-        return if (detected.isEmpty()) listOf("General") else detected
-    }
+## Current implementation status
 
-    fun orchestrate(prompt: String): AgentTask {
-        val lowerPrompt = prompt.lowercase()
-        val taskType = when {
-            lowerPrompt.contains("ticket") || lowerPrompt.contains("flight") || lowerPrompt.contains("booking") -> TaskType.BOOKING
-            lowerPrompt.contains("order") || lowerPrompt.contains("buy") || lowerPrompt.contains("cart") -> TaskType.ECOMMERCE
-            lowerPrompt.contains("scrape") || lowerPrompt.contains("data") || lowerPrompt.contains("collect") -> TaskType.SCRAPING
-            else -> TaskType.GENERAL
-        }
+This codebase is a working foundation with the following features:
 
-        val plan = when (taskType) {
-            TaskType.BOOKING -> listOf(
-                "Identify travel intent",
-                "Search available ticket options",
-                "Compare fares and routes",
-                "Fill booking form",
-                "Wait for user confirmation before payment"
-            )
-            TaskType.ECOMMERCE -> listOf(
-                "Parse shopping intent",
-                "Find product on retailer site",
-                "Add item to cart",
-                "Check total and checkout flow",
-                "Require explicit user confirmation for final payment"
-            )
-            TaskType.SCRAPING -> listOf(
-                "Identify target website",
-                "Extract relevant fields",
-                "Normalize the dataset",
-                "Save structured results locally",
-                "Present clean summary to user"
-            )
-            TaskType.GENERAL -> listOf(
-                "Understand user intent",
-                "Create sub-tasks",
-                "Execute browser or API workflow",
-                "Generate concise final result"
-            )
-        }
+- Jetpack Compose UI for a simple agent dashboard
+- Local task detection and orchestration model
+- Model download entry point for a Gemma 3 1B download URL
+- Secure encrypted storage using Android Keystore + EncryptedSharedPreferences
+- Execution logs and safety guard status
+- Project-ready structure for future browser automation and LLM runtime integration
 
-        return AgentTask(taskType, prompt, plan)
-    }
-}
+## Tech stack
+
+- Kotlin
+- Jetpack Compose
+- AndroidX lifecycle and security libraries
+- Android Accessibility Service ready for future automation
+- Planned integration with llama.cpp / Android local LLM runtime
+- Planned browser automation via Playwright or native automation layer
+
+## Potential use cases
+
+- Travel booking and flight comparison
+- Food ordering and e-commerce checkout assistance
+- Web data collection and scraping
+- Multi-step AI-driven browser tasks
+
+## Running the app
+
+1. Open the repo in Android Studio.
+2. Sync Gradle.
+3. Run the `app` module on emulator or real device.
+
+## Security notes
+
+- Credentials are stored only in encrypted local storage.
+- Final payment and OTP actions are intentionally blocked until user permission.
+- This is a prototype. Production use should add app sandboxing, stricter permissions, and a review layer for external websites.
+
+## Next extension roadmap
+
+1. Integrate `llama.cpp` or Android LLM runtime for actual Gemma 3 1B execution.
+2. Add Accessibility Service and page element detection.
+3. Add browser automation for real checkout / booking flows.
+4. Add secure credential vault for multiple websites.
+5. Add backend orchestration service and cloud fallback mode.
+
+## Example prompts
+
+- "Book a flight to Dhaka from Chittagong next Friday and compare options."
+- "Order a pizza from my favorite food app."
+- "Collect smartphone prices from five online stores and summarize them."
+
+## Repository
+
+https://github.com/dahfhkhfbjhvdjhyv-spec/autonomous-ai-agent

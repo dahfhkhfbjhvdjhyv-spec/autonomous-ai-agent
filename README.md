@@ -1,26 +1,23 @@
-package com.autonomousai.agent.security
+package com.autonomousai.agent.service
 
-import android.content.Context
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
+import com.autonomousai.agent.model.AgentTask
+import com.autonomousai.agent.model.TaskType
 
-class EncryptedLocalStorage(context: Context) {
-
-    private val masterKey = MasterKey.Builder(context)
-        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-        .build()
-
-    private val prefs = EncryptedSharedPreferences.create(
-        "agent_secure_store",
-        masterKey,
-        context,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
-
-    fun saveCredential(key: String, value: String) {
-        prefs.edit().putString(key, value).apply()
+class TaskExecutionService {
+    fun summarize(task: AgentTask): List<String> {
+        return listOf(
+            "[INFO] Agent analyzed intent",
+            "[TASK] Type: ${task.type}",
+            "[PLAN] ${task.plan.joinToString(" -> ")}",
+            "[SAFETY] Human confirmation required before payment, OTP, or final order confirmation",
+            "[NEXT] Browser automation or API workflow is ready"
+        )
     }
 
-    fun getCredential(key: String): String? = prefs.getString(key, null)
+    fun guardForSensitiveAction(taskType: TaskType): Boolean {
+        return when (taskType) {
+            TaskType.BOOKING, TaskType.ECOMMERCE -> true
+            TaskType.SCRAPING, TaskType.GENERAL -> false
+        }
+    }
 }

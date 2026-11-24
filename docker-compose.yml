@@ -1,0 +1,16 @@
+services:
+  agent:
+    build: .
+    container_name: ai-money-agent
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite:////srv/data/agent.db
+      PYTHONPATH: /srv/backend
+    volumes:
+      - agent_data:/srv/data
+    restart: unless-stopped
+volumes:
+  agent_data:

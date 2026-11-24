@@ -20,6 +20,9 @@ app.add_middleware(
     allow_headers=["Content-Type", "Authorization"],
 )
 
+# Ensure tables also exist for CLI/test clients that do not trigger ASGI lifespan.
+init_db()
+
 def log_event(kind: str, message: str) -> None:
     with connect() as conn:
         conn.execute("INSERT INTO activity(event_type, message) VALUES (?, ?)", (kind, message))
